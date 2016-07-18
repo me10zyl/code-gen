@@ -1,0 +1,243 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        body {
+            background-color: #4a2a73;
+        }
+
+        #java-input {
+            width: 300px;
+            height: 95%;
+            background-color: whitesmoke;
+            overflow: auto;
+            font-size: 12px;
+            font-family: consolas;
+        }
+
+        #java-output {
+            width: 300px;
+            height: 95%;
+            background-color: whitesmoke;
+            overflow: auto;
+            font-size: 12px;
+            font-family: consolas;
+        }
+
+        #java-output2 {
+            width: 300px;
+            height: 95%;
+            background-color: whitesmoke;
+            overflow: auto;
+            font-size: 12px;
+            font-family: consolas;
+        }
+
+        .active {
+            background-color: dodgerblue;
+        }
+
+        .radio {
+            color: greenyellow;
+            font-family: consolas;
+            border-bottom: beige 1px solid;
+        }
+
+        .block {
+            display: inline-block;
+            position: relative;
+        }
+
+        .option {
+            color: white;
+            font-size: 10px;
+        }
+        .radio-head{
+            color: coral;
+            font-family: consolas;
+        }
+
+    </style>
+    <script src="js/jquery-1.8.0.min.js"></script>
+</head>
+<body>
+<div class="block">
+    <textarea id="java-input">
+    </textarea>
+</div>
+<div class="block" style="width: 100px;height: 95%;">
+    <div style="position: absolute;top:45%">
+        <button id="convert" style="width: 100px;"> →</button>
+    </div>
+</div>
+<div class="block">
+    <div id="java-output">
+    </div>
+</div>
+<div class="block" style="width: 150px;height: 95%;">
+    <div style="position: absolute;top:31%">
+        <div class="radio-head">
+            SQL
+            <hr/>
+        </div>
+        <div class="radio">
+            <div><input name="g" type="radio" value="2" checked="checked"/> 生成查询语句</div>
+            <div class="option"><input type="checkbox" id="g21" checked="checked"/>数据库字段下划线</div>
+        </div>
+        <div class="radio-head">
+            HTML
+            <hr/>
+        </div>
+        <div class="radio">
+            <input name="g" type="radio" value="3"/> 生成COMBOGRID
+        </div>
+        <div class="radio">
+            <input name="g" type="radio" value="1"/> 生成SEARCH
+        </div>
+        <div style="text-align: center;margin-top: 20px;">
+            <button id="convert2" style="width: 100px;"> →</button>
+        </div>
+    </div>
+</div>
+<div class="block">
+    <textarea id="java-output2">
+    </textarea>
+</div>
+<div>
+    <button id="format">格式化</button>
+    <button id="selectAll">选择全部</button>
+    <button id="unselectAll">反选全部</button>
+</div>
+</body>
+<script>
+    //<![CDATA[
+    $(function () {
+        ui.init();
+    });
+
+    var tool = {
+        getFieldData : function(){
+            var data = {};
+            data.fields = [];
+            data.source = $("#java-input").val();
+            $(".field").each(function () {
+                if ($(this).find("input[type=checkbox]").is(":checked")) {
+                    var field = {};
+                    field.variableDeclarator = $(this).text();
+                    field.underlineName = $("#g21").is(":checked");
+                    data.fields.push(field);
+                }
+            });
+            return data;
+        },
+        gen : function(url){
+            var data = tool.getFieldData();
+            $.ajax({
+                type: "post",
+                url: url,
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function (data) {
+                    $("#java-output2").val(data);
+                },
+                error: ui.error
+            })
+        }
+    }
+
+    var ui = {
+        init: function () {
+            $("#format").click(function () {
+                server.format($("#java-input").val());
+            });
+            $("#convert").click(function () {
+                server.fields($("#java-input").val());
+            })
+            $("#convert2").click(function () {
+                var value = $("input[name=g]:checked").val();
+                switch (parseInt(value)) {
+                    case 1:
+                        server.genSearch();
+                        break;
+                    case 2:
+                        server.genSQL();
+                        break;
+                    case 3:
+                        server.genCombogrid();
+                        break;
+                    default :
+                        break;
+                }
+            });
+            $("#selectAll").click(function () {
+                $(".field input[type=checkbox]").prop("checked", "checked");
+            });
+            $("#unselectAll").click(function () {
+                $(".field input[type=checkbox]").removeProp("checked");
+            });
+        },
+        fieldEvents: function () {
+            $(".field").find(":checkbox").click(function(evt){
+                evt.stopPropagation();
+            });
+            $(".field").click(function () {
+                $(".field").removeClass("active");
+                $(this).addClass("active");
+                $(this).find(":checkbox").prop("checked", !$(this).find(":checkbox").is(":checked"));
+
+            })
+        },
+        error: function (xhr) {
+            var data = JSON.parse(xhr.responseText);
+            alert(data.status +"\n"+data.exception+"\n" +data.message);
+        }
+    }
+
+    var server = {
+        fields: function (java) {
+            var data = {};
+            data.source = java;
+            $.ajax({
+                type: "post",
+                url: "/api/fields",
+                data: JSON.stringify(data),
+                contentType: "application/json;charset=UTF-8",
+                success: function (data) {
+                    var arr = data.splice(",");
+                    var str = "";
+                    for (var i in arr) {
+                        str += "<div class='field'>" + arr[i] + "<input type='checkbox'/> </div>"
+                    }
+                    $("#java-output").html(str);
+                    ui.fieldEvents();
+                },
+                error: ui.error
+            })
+        },
+        genSearch : function(){
+            tool.gen("/api/genSEARCH");
+        },
+        genCombogrid : function(){
+            tool.gen("/api/genCOMBOGRID");
+        },
+        genSQL: function () {
+            tool.gen("/api/genSQL");
+        },
+        format: function (java) {
+            var data = {};
+            data.source = java;
+            $.ajax({
+                type: "post",
+                url: "/api/format",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function (str) {
+                    $("#java-input").val(str);
+                },
+                error: ui.error
+            })
+        }
+    }
+    //]]>
+</script>
+</html>
