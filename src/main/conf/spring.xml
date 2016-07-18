@@ -14,6 +14,8 @@
 
 	<mvc:resources location="file:./src/main/resources/js/"
 		mapping="/js/**"></mvc:resources>
+    <mvc:resources location="file:./src/main/resources/img/"
+                   mapping="/img/**"></mvc:resources>
 	<bean id="velocityEngineFactoryBean"
 		class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
 		<property name="resourceLoaderPath">
