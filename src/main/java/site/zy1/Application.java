@@ -13,7 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-@ImportResource("file:./src/main/conf/spring.xml")
+@ImportResource("conf/spring.xml")
 @ComponentScan({ "site.zy1", })
 @EnableAutoConfiguration
 public class Application extends SpringBootServletInitializer{

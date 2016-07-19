@@ -26,7 +26,7 @@ public class TestJavaParser {
 
 	@Test
 	public void test() throws ParseException, IOException {
-		FileInputStream in = new FileInputStream(
+		/*FileInputStream in = new FileInputStream(
 				"E:\\JavaEE\\code-generator\\src\\test\\java\\site\\zy1\\data\\TCmcardModel.java");
 
 		CompilationUnit cu;
@@ -38,7 +38,7 @@ public class TestJavaParser {
 		}
 
 		// prints the resulting compilation unit to default system output
-		new MethodVisitor().visit(cu, null);
+		new MethodVisitor().visit(cu, null);*/
 		// System.out.println(cu.toString());
 	}
 

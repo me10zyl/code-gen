@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Vendor: Pivotal Software, Inc.
-Implementation-Title: Code Generator =_+
-Implementation-Version: 0.0.1-SNAPSHOT
-Implementation-Vendor-Id: site.zy1
-Build-Jdk: 1.7.0_07
-Built-By: ZyL
-Created-By: Maven Integration for Eclipse
-
