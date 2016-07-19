@@ -25,7 +25,7 @@ public class Application extends SpringBootServletInitializer {
 		System.out.println("*****************service begun************************");
 	}
 
-	// 显示注入EncodingFilter, Form提交使用UTF-8编码
+/*	// 显示注入EncodingFilter, Form提交使用UTF-8编码
 	@Bean
 	public CharacterEncodingFilter characterEncodingFilter() {
 		final CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
@@ -44,7 +44,7 @@ public class Application extends SpringBootServletInitializer {
 			}
 		});
 		return factory;
-	}
+	}*/
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
