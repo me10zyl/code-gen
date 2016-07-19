@@ -1,12 +1,15 @@
 package site.zy1.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class IndexController {
 	@RequestMapping("/")
-	public String index() {
+	public String index(Model model,@Value("${app.version:}") String version) {
+		model.addAttribute("version", version);
 		return "index";
 	}
 }

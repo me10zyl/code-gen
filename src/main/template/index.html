@@ -76,8 +76,11 @@
 </head>
 <body>
 <!--<a id="forkme" href="https://github.com/me10zyl/code-gen"></a>-->
+<div style="color: white;margin-bottom: 10px;">
+    (?) Tutorial: 第一栏填写Java 实体类 代码（字段注释越多越好，将会根据注释自动生成相应的描述），字段的类型也会影响代码生成策略。
+</div>
 <div class="block">
-    <textarea id="java-input" placeholder="请填写Java代码">
+    <textarea id="java-input">
     </textarea>
 </div>
 <div class="block" style="width: 100px;height: 95%;">
@@ -256,4 +259,5 @@
     }
     //]]>
 </script>
+<small style="color: white" th:inline="text">version : [[${version}]]</small>
 </html>

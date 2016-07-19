@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>site.zy1</groupId>
 	<artifactId>code-generator</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0-alpha</version>
 	<name>Code Generator =_+</name>
 	<packaging>war</packaging>
 	<parent>
