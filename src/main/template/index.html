@@ -125,7 +125,7 @@
     <a href="https://github.com/me10zyl/code-gen" target="_blank" style="color: whitesmoke">fork me</a>
 </div>
 </body>
-<script>
+<script th:inline="javascript" type="text/javascript">
     //<![CDATA[
     $(function () {
         ui.init();
@@ -215,7 +215,7 @@
             data.source = java;
             $.ajax({
                 type: "post",
-                url: "/api/fields",
+                url: /*[[@{/api/fields}]]*/ "/api/fields",
                 data: JSON.stringify(data),
                 contentType: "application/json;charset=UTF-8",
                 success: function (data) {
@@ -231,20 +231,20 @@
             })
         },
         genSearch : function(){
-            tool.gen("/api/genSEARCH");
+            tool.gen(/*[[@{/api/genSEARCH}]]*/ "/api/genSEARCH");
         },
         genCombogrid : function(){
-            tool.gen("/api/genCOMBOGRID");
+            tool.gen(/*[[@{/api/genCOMBOGRID}]]*/ "/api/genCOMBOGRID");
         },
         genSQL: function () {
-            tool.gen("/api/genSQL");
+            tool.gen(/*[[@{/api/genSQL}]]*/ "/api/genSQL");
         },
         format: function (java) {
             var data = {};
             data.source = java;
             $.ajax({
                 type: "post",
-                url: "/api/format",
+                url: /*[[@{/api/format}]]*/ "/api/format",
                 data: JSON.stringify(data),
                 contentType: "application/json",
                 success: function (str) {
