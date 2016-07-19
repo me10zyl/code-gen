@@ -11,12 +11,15 @@ import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-@ImportResource("conf/spring.xml")
+@ImportResource("${spring.config.path}")
 @ComponentScan({ "site.zy1", })
 @EnableAutoConfiguration
-public class Application extends SpringBootServletInitializer{
+@PropertySources({ @PropertySource(value = "classpath:application-config.properties") })
+public class Application extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 		System.out.println("*****************service begun************************");
@@ -46,7 +49,7 @@ public class Application extends SpringBootServletInitializer{
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
 		// TODO Auto-generated method stub
-		return  builder.sources(Application.class);
+		return builder.sources(Application.class);
 	}
-	
+
 }

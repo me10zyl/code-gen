@@ -12,14 +12,14 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<mvc:resources location="js/"
+	<mvc:resources location="${spring.config.mvc.js}"
 		mapping="/js/**"></mvc:resources>
-    <mvc:resources location="img/"
+    <mvc:resources location="${spring.config.mvc.img}"
                    mapping="/img/**"></mvc:resources>
 	<bean id="velocityEngineFactoryBean"
 		class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
 		<property name="resourceLoaderPath">
-			<value>template/templates</value>
+			<value>${spring.config.velocity.template}</value>
 		</property>
 		<property name="preferFileSystemAccess">
 			<value>true</value>
