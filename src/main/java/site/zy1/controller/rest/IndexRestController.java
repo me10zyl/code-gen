@@ -40,41 +40,51 @@ public class IndexRestController {
 		CompilationUnit cu = JavaParser.parse(in);
 		return cu.toString();
 	}
-	
+
 	@RequestMapping(value = "/genSQL", method = RequestMethod.POST)
-	public String genSQL(@RequestBody Pojo java){
+	public String genSQL(@RequestBody Pojo java) {
 		return sqlGen.generate(java);
 	}
-	
+
 	@RequestMapping(value = "/genCOMBOGRID", method = RequestMethod.POST)
-	public String genCOMBOGRID(@RequestBody Pojo java) throws VelocityException, IOException{
+	public String genCOMBOGRID(@RequestBody Pojo java) throws VelocityException, IOException {
 		return htmlGen.generateComboGrid(java);
 	}
-	
+
 	@RequestMapping(value = "/genSEARCH", method = RequestMethod.POST)
-	public String genSEARCH(@RequestBody Pojo java) throws VelocityException, IOException{
+	public String genSEARCH(@RequestBody Pojo java) throws VelocityException, IOException {
 		return htmlGen.generateSearch(java);
 	}
 
 	@RequestMapping(value = "/fields", method = RequestMethod.POST)
-	public List<String> fields(@RequestBody Pojo java) throws ParseException, IOException {
+	public List<Field> fields(@RequestBody Pojo java) throws ParseException, IOException {
 		InputStream in = new ByteArrayInputStream(java.getSource().getBytes());
 		CompilationUnit cu = JavaParser.parse(in);
 		List<TypeDeclaration> types = cu.getTypes();
 		List<VariableDeclarator> variablesArray = new ArrayList<VariableDeclarator>();
+		List<FieldDeclaration> fieldsArray = new ArrayList<FieldDeclaration>();
 		for (TypeDeclaration type : types) {
 			List<BodyDeclaration> members = type.getMembers();
 			for (BodyDeclaration member : members) {
 				if (member instanceof FieldDeclaration) {
 					FieldDeclaration field = (FieldDeclaration) member;
-					List<VariableDeclarator> variables = field.getVariables();
-					variablesArray.add(variables.get(0));
+					/*
+					 * List<VariableDeclarator> variables =
+					 * field.getVariables();
+					 * variablesArray.add(variables.get(0));
+					 */
+					fieldsArray.add(field);
 				}
 			}
 		}
-		List<String> fields = new ArrayList<String>();
-		for(VariableDeclarator var : variablesArray){
-			fields.add(var.toStringWithoutComments());
+		List<Field> fields = new ArrayList<Field>();
+		for (FieldDeclaration f : fieldsArray) {
+			Field field = new Field();
+			if (f.getComment() != null) {
+				field.setComment(f.getComment().getContent().replace("*", "").trim());
+			}
+			field.setVariable(f.getVariables().get(0).toStringWithoutComments());
+			fields.add(field);
 		}
 		return fields;
 	}

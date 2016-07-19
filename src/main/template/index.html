@@ -143,7 +143,7 @@
             $(".field").each(function () {
                 if ($(this).find("input[type=checkbox]").is(":checked")) {
                     var field = {};
-                    field.variableDeclarator = $(this).text();
+                    field.variableDeclarator = $(this).find(".field-content").text();
                     field.underlineName = $("#g21").is(":checked");
                     data.fields.push(field);
                 }
@@ -226,7 +226,11 @@
                     var arr = data.splice(",");
                     var str = "";
                     for (var i in arr) {
-                        str += "<div class='field'>" + arr[i] + "<input type='checkbox'/> </div>"
+                        var comment = "";
+                        if(arr[i].comment){
+                            comment = "<span class='comment'>("+arr[i].comment+")</span>";
+                        }
+                        str += "<div class='field'><span class='field-content'>" + arr[i].variable + "</span>" +comment+ "<input type='checkbox'/> </div>"
                     }
                     $("#java-output").html(str);
                     ui.fieldEvents();
